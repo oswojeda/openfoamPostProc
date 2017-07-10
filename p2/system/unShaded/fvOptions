@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  dev                                   |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      fvOptions;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+TfieldsSource
+{
+    type            scalarCodedSource;
+    active          false;
+    selectionMode   cellZone;
+    cellZone         unShaded;
+
+    scalarCodedSourceCoeffs
+    {
+        fieldNames      (h);
+        redirectType    TfieldsSource;
+        selectionMode   cellZone;
+        cellZone        unShaded;
+
+
+        codeInclude
+        #{
+          #include "fvCFD.H"
+        #};
+
+        codeOptions
+        #{
+          -I$(LIB_SRC)/finiteVolume/cfdTools/general/lnInclude
+        #};
+
+        codeCorrect
+        #{
+        #};
+
+        codeAddSup
+        #{
+          const scalarField& T = mesh_.lookupObject<volScalarField>("T");
+          const scalarField& T0 = mesh_.lookupObject<volScalarField>("T").oldTime();
+          scalarField& hSource = eqn.source();
+          hSource -= (1000 + 0.00008 * pow(T0,3) - 0.00012 * pow(T0,2) * T) * mesh_.V();
+          //eqn += fvm::SuSp((1000 + 0.00008 * pow(T0,3) - 0.00012 * pow(T0,2) * T) * mesh_.V(),phi);
+        #};
+
+        codeSetValue
+        #{
+        #};
+
+        // Dummy entry. Make dependent on above to trigger recompilation
+        code
+        #{
+            $codeInclude
+            $codeOptions
+            $codeCorrect
+            $codeAddSup
+            $codeSetValue
+        #};
+    }
+
+    TfieldsSourceCoeffs
+    {
+        // Dummy entry
+    }
+}

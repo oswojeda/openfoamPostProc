@@ -1,0 +1,98 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  3.0.x                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+convertToMeters 1;
+
+vertices
+(
+    (0 0 0) //0
+    (0.7 0 0) //1
+    (1 0 0) //2
+    (1 0.25 0) //3
+    (1 0.5 0) //4
+    (0.7 0.5 0) //5
+    (0.7 0.25 0) //6
+    (0 0.5 0) //7
+    (0 0 -0.1) //8
+    (0.7 0 -0.1) //9
+    (1 0 -0.1) //10
+    (1 0.25 -0.1) //11
+    (1 0.5 -0.1) //12
+    (0.7 0.5 -0.1) //13
+    (0.7 0.25 -0.1) //14
+    (0 0.5 -0.1) //15
+    (0 0.25 0) //16
+    (0 0.25 -0.1)//17
+);
+
+blocks
+(
+	hex (8 9 14 17 0 1 6 16)	unShaded	(168 60 1) simpleGrading (1 1 1)
+	hex (17 14 13 15 16 6 5 7)	unShaded	(168 60 1) simpleGrading (1 1 1)
+	hex (9 10 11 14 1 2 3 6)	unShaded	(72 60 1) simpleGrading (1 1 1)
+	hex (14 11 12 13 6 3 4 5)	Shaded		(72 60 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+boundary
+(
+    topWall
+    {
+        type wall;
+        faces
+        (
+            (7 15 13 5)
+            (4 5 13 12)
+        );
+    }
+    leftWall
+    {
+        type wall;
+        faces
+        (
+            (16 17 15 7)
+            (0 8 17 16)
+        );
+    }
+    rightWall
+    {
+	type wall;
+	faces
+        (
+    	    (3 4 12 11)
+    	    (2 3 11 10)
+        );
+    }
+    bottomWall
+    {
+	type wall;
+	faces
+	(
+            (8 0 1 9)
+            (9 1 2 10)
+        );
+    }
+
+);
+
+mergePatchPairs
+(
+);
+
+// ************************************************************************* //

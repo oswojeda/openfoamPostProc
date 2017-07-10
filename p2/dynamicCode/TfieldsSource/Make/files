@@ -1,0 +1,6 @@
+/* dynamicCode:
+ * SHA1 = 52a6826444ad193d4b84f2777f50ba8273c04127
+ */
+codedFvOptionTemplate.C
+
+LIB = $(PWD)/../platforms/$(WM_OPTIONS)/lib/libTfieldsSource_52a6826444ad193d4b84f2777f50ba8273c04127
