@@ -1,14 +1,9 @@
 # https://github.com/google/python-fire/blob/master/doc/guide.md
 
-import os
+import parse_files
 
-# case = 'normal' # normal / multiregion
-# basedir = '.test/' + case
+# CONFIGURATION
+CASE = 'normal' # normal / multiregion
+BASEDIR = './test/'
 
-basedir = 'p2/'
-
-dirs = os.listdir(basedir)
-
-for files in dirs:
-	print(files)
-
+print(parse_files.get_temps(CASE, BASEDIR))
