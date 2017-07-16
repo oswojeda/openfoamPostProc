@@ -1,44 +1,25 @@
 import os
 from toolz.functoolz import compose
+from toolz import curry
+from toolz.curried import filter, map
 
+get_case_dir = lambda basedir: lambda case : basedir + case + '/' # curried
 
-def get_case_dir(case, basedir):
-    return basedir + case + '/'
-
-
-def getdirs(case, basedir):
-    dirs = os.listdir(get_case_dir(case, basedir))
-    return dirs
-
-
-list_to_float = lambda l: map(float, l)
-
-
-def parse_zero(number):
-    if(number == int(number)):
-        return int(number)
-    else:
-        return number
-
-
-getMaxNumber = compose(
-    str,
-    parse_zero,
-    max,
-    list_to_float
+max_dir = compose(
+    str, #std
+    lambda number: int(number) if number == int(number) else number, # parse_zero
+    max, #std
+    map(float), # list_to_float
+    filter(lambda e: e.isdigit()), # only_numbers
+    os.listdir # std
 )
 
-def gen_temp_path(case, basedir):
-    # directorios
-    dirs = [file for file in getdirs(case, basedir) if file.isdigit()]
-    temp_path = get_case_dir(case, basedir) + getMaxNumber(dirs) + '/T'
-    return temp_path
+gen_temp_path = lambda path: path + max_dir(path) + '/T'
 
-
-
-
-def get_temps(case, basedir):
-    temp_path = gen_temp_path(case, basedir)
+@curry
+def get_temps(basedir, case):
+    base_path = get_case_dir(basedir)(case)
+    temp_path = gen_temp_path(base_path)
     temps = []
     with open(temp_path, 'r') as temp_file:
         list_length = 0
@@ -56,7 +37,7 @@ def main():
     CASE = 'normal' # normal / multiregion
     BASEDIR = './test/'
     # Just for simple testing
-    print(get_temps(CASE, BASEDIR)[0])
+    print(get_temps(BASEDIR)(CASE)[0])
 
 if __name__ == '__main__':
     main()
